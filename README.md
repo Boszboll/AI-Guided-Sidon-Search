@@ -41,7 +41,7 @@ This proves the existence of an "Elastic Peak" in modular overshooting: if the d
 The repository contains the standalone Python script that generates the set and mathematically verifies it in $O(K^2)$ time.
 
 ```bash
-python sidon_hall_search.py
+python sidon_benchmark.py
 ```
 ## 📜 The 105-Element Set
 The exact sequence found for $N=10000$ is available in sidon_10000_105.txt.
