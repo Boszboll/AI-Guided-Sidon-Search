@@ -42,3 +42,8 @@ The repository contains the standalone Python script that generates the set and 
 
 ```bash
 python sidon_hall_search.py
+```
+## 📜 The 105-Element Set
+The exact sequence found for $N=10000$ is available in sidon_10000_105.txt.
+
+Experiment conducted in May 2026 exploring the intersection of Prompt Engineering, Program Synthesis, and Galois Theory.
