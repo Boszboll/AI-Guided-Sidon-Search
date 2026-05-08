@@ -228,5 +228,29 @@ def find_maximal_sidon(N: int) -> Tuple[List[int], dict]:
                 'multiplier': int(best_mult),
                 'offset': int(best_offset)
             }
-            
     return global_best_set, best_meta
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Sidon Set Benchmark')
+    parser.add_argument('-n', type=int, default=10000, help='Domain N')
+    parser.add_argument('-o', type=str, default=None, help='Output file')
+    args = parser.parse_args()
+
+    print(f"Running benchmark for N = {args.n}")
+    start = time.perf_counter()
+    best_set, meta = find_maximal_sidon(args.n)
+    elapsed = time.perf_counter() - start
+
+    K = len(best_set)
+    density = K / math.sqrt(args.n)
+
+    print(f"Maximal K found: {K}")
+    print(f"Density achieved: {density:.3f}")
+    print(f"Execution time: {elapsed:.3f}s")
+    
+    if args.o:
+        with open(args.o, 'w') as f:
+            f.write(f"# N={args.n}, K={K}, Density={density:.3f}\n")
+            f.write(f"# Meta: {meta}\n")
+            f.write(",".join(map(str, best_set)))
+        print(f"Results saved to {args.o}")
