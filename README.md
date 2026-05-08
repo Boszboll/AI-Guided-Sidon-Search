@@ -59,7 +59,7 @@ The algorithm correctly identifies the absolute mathematical optimum in fraction
 ---
 
 
-## 🌌 5. Empirical Data on Macro-Domains
+## 🌌 4. Empirical Data on Macro-Domains
 
 The algorithm performs an exhaustive search of all valid isomorphism multipliers. Execution times were recorded on a single CPU core:
 
@@ -80,7 +80,7 @@ The algorithm performs an exhaustive search of all valid isomorphism multipliers
 
 ---
 
-## 🧮 6. Algorithmic Architecture
+## 🧮 5. Algorithmic Architecture
 
 The mathematical logic bypasses the decision trees of CP solvers in favor of geometric projection:
 
@@ -91,7 +91,7 @@ The mathematical logic bypasses the decision trees of CP solvers in favor of geo
 
 ---
 
-## ⚙️ 7. Usage and Implementation
+## ⚙️ 6. Usage and Implementation
 
 ### Repository Structure
 - `src/`: Core algorithm modules.
@@ -118,14 +118,14 @@ python src/sidon_benchmark.py -n 100000 -o results/result_100k.txt
 
 ---
 
-## 🏆 8. Engineering Applications
+## 🏆 7. Engineering Applications
 
 For a detailed analysis of how this algorithm resolves hardware constraints in **Secure OCDMA Telecommunications** and **Minimum Redundancy Linear Arrays (Radar)**, please refer to:
 👉 **[Real-World Applications Report](docs/APPLICATIONS.md)**
 
 ---
 
-## 🎯 9. The 105-Element Record Set ($N=10000$)
+## 🎯 8. The 105-Element Record Set ($N=10000$)
 
 To empirically demonstrate the algorithm's capability, here is the maximal $K=105$ set generated for $N=10,000$. Achieving a density of $1.050\times\sqrt{N}$, it outperforms standard base algebraic formulations.
 
@@ -145,8 +145,9 @@ To empirically demonstrate the algorithm's capability, here is the maximal $K=10
 
 ---
 
-## 📚 10. Bibliography
+## 📚 9. Bibliography
 - **Erdős, P., & Turán, P. (1941)**: *On a problem of Sidon in additive number theory and on some related problems*.
+- **Singer, J. (1938)**: *A theorem in finite projective geometry and some applications to number theory*. Transactions of the American Mathematical Society.
 - **Distributed.net OGR Project**: [Official OGR-28 Completion Press Release](https://blogs.distributed.net/2022/11/23/17/14/bovine/).
 - **Shearer, J. B. (IBM Research)**: [Golomb Ruler Table](http://www.research.ibm.com/people/s/shearer/grle.html).
 - **Cilleruelo, J. (2010)**: *Combinatorial problems in finite fields and Sidon sets*.
