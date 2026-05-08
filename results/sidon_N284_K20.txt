@@ -1,0 +1,9 @@
+# Maximal Sidon Set per N=284
+# Cardinality (K): 20
+# Base Geometry: Singer q=19 (v=381)
+# Hall Multiplier: k=65
+# Density: 1.187 * sqrt(N)
+# Execution Time: 0.002 seconds
+
+       1,      2,      9,     12,     69,     78,     95,    117,    122,    157
+     159,    180,    195,    209,    213,    229,    241,    254,    260,    284

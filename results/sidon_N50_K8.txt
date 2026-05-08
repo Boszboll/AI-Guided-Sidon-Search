@@ -1,0 +1,8 @@
+# Maximal Sidon Set per N=50
+# Cardinality (K): 8
+# Base Geometry: Singer q=7 (v=57)
+# Hall Multiplier: k=1
+# Density: 1.131 * sqrt(N)
+# Execution Time: 1.442 seconds
+
+       1,     20,     24,     31,     40,     45,     46,     48
