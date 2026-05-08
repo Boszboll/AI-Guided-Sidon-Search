@@ -10,7 +10,7 @@ This pure-Python project acts as a bridge between pure Additive Combinatorics an
 
 A **Sidon Set** (or $B_2$ sequence) is a set of integers $A \subset [1, N]$ such that all pairwise sums $a+b$ (for $a,b \in A$, $a \le b$) are uniquely distinct. Equivalently, all pairwise differences are distinct.
 When a Sidon set is translated to start at $0$, it is perfectly equivalent to a **Golomb Ruler**, where the maximum element $L$ is the "length" of the ruler.
-*(Formula: A Sidon set in $[1, N]$ is a Golomb Ruler of length $L = N-1$.)*
+(Formula: A Sidon set in $[1, N]$ is a Golomb Ruler of length $L = N-1$.)
 
 ### The Density Barrier
 The central problem in combinatorial number theory is maximizing the cardinality $K$ (number of elements) for a given domain $N$. 
