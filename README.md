@@ -1,55 +1,57 @@
 # 📏 Maximal Sidon Set Generator (Hall-Singer Paradigm)
 
-Generatore computazionale ad alte prestazioni per **Maximal Sidon Sets ($B_2$ sets)** e **Optimal Golomb Rulers**, basato su geometria di Galois (Singer Difference Sets) ed espansione isomorfa tramite Moltiplicatori di Hall.
+High-performance computational generator for **Maximal Sidon Sets ($B_2$ sets)** and **Optimal Golomb Rulers**, based on Galois geometry (Singer Difference Sets) and isomorphic expansion via Hall Multipliers.
 
-Questo progetto, scritto in puro Python e accelerato a livello macchina tramite **Numba (LLVM JIT Compiler)**, esplora lo spazio matematico tra la Combinatoria Additiva e il Constraint Solving. Per piccoli domini ($N \le 600$) eguaglia i tempi dei supercomputer, mentre su macro-domini ($N=100.000$) mantiene densità superiori al limite algebrico classico in tempi polinomiali.
-
----
-
-## 📖 1. Il Problema Matematico
-
-Un **Sidon Set** (o sequenza $B_2$) è un insieme di interi $A \subset [1, N]$ in cui tutte le somme a coppie $a+b$ sono uniche. Questo equivale a dire che tutte le differenze a coppie sono distinte.
-Traslando l'insieme in modo che parta da $0$, si ottiene un **Golomb Ruler**, in cui l'elemento massimo $L$ rappresenta la "lunghezza" del righello (con la relazione $L = N-1$).
-
-### La Barriera della Densità (Erdős-Turán)
-Il problema del millennio nella combinatoria è massimizzare la cardinalità $K$ per un dato dominio $N$. Il limite superiore asintotico di Erdős-Turán (1941) dimostra che la densità non può superare:
-$$ \limsup_{N \to \infty} \frac{K}{\sqrt{N}} \le 1 $$
-Andare oltre questo limite in spazi finiti richiede costruzioni algebriche che pieghino la topologia dello spazio.
+This project, written in pure Python and machine-level accelerated via **Numba (LLVM JIT Compiler)**, explores the mathematical space between Additive Combinatorics and Constraint Solving. For small domains ($N \le 600$) it matches supercomputer times, while on macro-domains ($N=100,000$) it maintains densities higher than the classical algebraic limit in polynomial time.
 
 ---
 
-## 🥊 2. Lo Stato dell'Arte: Analisi Sincera e Comparativa
+## 📖 1. The Mathematical Problem
 
-Attualmente, la ricerca mondiale per trovare righelli ottimali o insiemi di Sidon massimali si divide in tre macro-categorie, a cui si aggiunge il nostro paradigma. Ecco una disamina **critica e realistica** delle metodologie.
+A **Sidon Set** (or $B_2$ sequence) is a set of integers $A \subset [1, N]$ such that all pairwise sums $a+b$ are uniquely distinct. This is equivalent to saying that all pairwise differences are distinct.
+By translating the set so that it starts at $0$, we obtain a **Golomb Ruler**, where the maximum element $L$ represents the "length" of the ruler (with the relationship $L = N-1$).
 
-| Algoritmo | Complessità | Massimo $N$ | Qualità Densità | Pro / Contro |
+### The Density Barrier (Erdős-Turán)
+The millennium problem in combinatorics is maximizing the cardinality $K$ for a given domain $N$. The asymptotic upper bound by Erdős-Turán (1941) proves that the density cannot exceed:
+```math
+\limsup_{N \to \infty} \frac{K}{\sqrt{N}} \le 1
+```
+Exceeding this limit in finite spaces requires algebraic constructions that bend the topology of the space.
+
+---
+
+## 🥊 2. State of the Art: Sincere and Comparative Analysis
+
+Currently, global research to find optimal rulers or maximal Sidon sets is divided into three macro-categories, to which our paradigm is added. Here is a **critical and realistic** examination of the methodologies.
+
+| Algorithm | Complexity | Max $N$ | Density Quality | Pros / Cons |
 | :--- | :--- | :--- | :--- | :--- |
-| **SAT Solvers (distributed.net)** | Esponenziale (NP-Hard) | $N \approx 600$ | **Perfetta (Assoluta)** | *Pro*: Certifica matematicamente l'ottimo assoluto.<br>*Contro*: OGR-28 ($N=586$) ha richiesto **8 anni** di calcolo distribuito su migliaia di PC. |
-| **Constraint Programming (es. Minion, Gecode)** | Esponenziale | $N \approx 300$ | **Perfetta (Assoluta)** | *Pro*: Il "Forward Checking" taglia i rami inutili dell'albero di ricerca. Più veloce del SAT puro per i range bassi.<br>*Contro*: Si scontra con la stessa esplosione combinatoria. Inutile per i macro-domini. |
-| **Base Algebraic (Bose, Ruzsa)** | $O(1)$ / $O(N)$ | Infinito | Bassa ($\sim 1.0\sqrt{N}$) | *Pro*: Generazione istantanea. Regge teoricamente all'infinito.<br>*Contro*: Non sfrutta la topologia fine del dominio. La densità è inferiore al massimale reale raggiungibile. |
-| **Nostro Script (Hall-Singer + Numba)** | $O(N \sqrt{N})$ | $N > 200.000$ | **Altissima ($\sim 1.05\sqrt{N}$)** | *Pro*: Ottiene densità da record sfiorando i SAT, ma in tempi di frazioni di secondo. Batte l'algebra standard.<br>*Contro*: Per N giganteschi, valutare centinaia di migliaia di moltiplicatori isomorfi costa CPU (scala polinomialmente, non esponenzialmente). |
+| **SAT Solvers (distributed.net)** | Exponential (NP-Hard) | $N \approx 600$ | **Perfect (Absolute)** | *Pros*: Mathematically certifies the absolute optimum.<br>*Cons*: OGR-28 ($N=586$) required **8 years** of distributed computing on thousands of PCs. |
+| **Constraint Programming (e.g. Minion, Gecode)** | Exponential | $N \approx 300$ | **Perfect (Absolute)** | *Pros*: "Forward Checking" prunes useless branches of the search tree. Faster than pure SAT for low ranges.<br>*Cons*: Hits the same combinatorial explosion. Useless for macro-domains. |
+| **Base Algebraic (Bose, Ruzsa)** | $O(1)$ / $O(N)$ | Infinite | Low ($\sim 1.0\sqrt{N}$) | *Pros*: Instantaneous generation. Theoretically holds to infinity.<br>*Cons*: Does not exploit the fine topology of the domain. Density is lower than the actual reachable maximum. |
+| **Our Script (Hall-Singer + Numba)** | $O(N \sqrt{N})$ | $N > 200,000$ | **Extremely High ($\sim 1.05\sqrt{N}$)** | *Pros*: Achieves record densities brushing against SAT, but in fractions of a second. Beats standard algebra.<br>*Cons*: For gigantic N, evaluating hundreds of thousands of isomorphic multipliers costs CPU (scales polynomially, not exponentially). |
 
 ---
 
-## 📈 3. Benchmark Visivo: Velocità vs Densità
+## 📈 3. Visual Benchmark: Speed vs Density
 
-I dati teorici trovano conferma nell'analisi prestazionale. Di seguito il grafico generato testando gli algoritmi.
+The theoretical data is confirmed by the performance analysis. Below is the graph generated by testing the algorithms.
 
-![Grafico Benchmark Comparativo](benchmark_comparison.png)
+![Comparative Benchmark Graph](benchmark_comparison.png)
 
-### Analisi Critica dei Dati
-- **Tempi di Esecuzione (Pannello Sinistro)**: La linea rossa e magenta (SAT e CP Solvers) descrivono un dramma computazionale. Per trovare $K=28$ a $N=586$, i network mondiali impiegano anni, per poi entrare in uno stato di incomputabilità fisica (Uncomputable Zone). Il nostro codice (linea blu), grazie all'accelerazione LLVM di **Numba**, si mantiene ben sotto 1 secondo fino a $N=10.000$. Gli algoritmi algebrici base (linea ciano) rimangono istantanei.
-- **Efficienza di Densità (Pannello Destro)**: Qui si capisce **perché** valga la pena aspettare i $\sim 30$ secondi del nostro algoritmo per estrarre insiemi immensi. Mentre gli algoritmi algebrici base $O(1)$ crollano sulla soglia teorica $1.0\times\sqrt{N}$, il nostro algoritmo sfrutta l'overshooting per "spremere" l'isomorfismo, raggiungendo curve di densità del $\sim 1.05\times\sqrt{N}$, ad un passo dall'ottimo assoluto dei network SAT (che però richiedono millenni per N > 600).
+### Critical Data Analysis
+- **Execution Times (Left Panel)**: The red and magenta lines (SAT and CP Solvers) describe a computational drama. To find $K=28$ at $N=586$, worldwide networks take years, then enter a state of physical incomputability (Uncomputable Zone). Our code (blue line), thanks to **Numba**'s LLVM acceleration, stays well under 1 second up to $N=10,000$. Base algebraic algorithms (cyan line) remain instantaneous.
+- **Density Efficiency (Right Panel)**: Here we understand **why** it's worth waiting the $\sim 30$ seconds of our algorithm to extract immense sets. While base $O(1)$ algebraic algorithms crash on the theoretical threshold $1.0\times\sqrt{N}$, our algorithm leverages overshooting to "squeeze" the isomorphism, reaching density curves of $\sim 1.05\times\sqrt{N}$, one step away from the absolute optimum of SAT networks (which however require millennia for N > 600).
 
 ---
 
-## 🌌 4. Dati Bruti sui Macro-Domini (Limiti Computazionali)
+## 🌌 4. Raw Data on Macro-Domains (Computational Limits)
 
-L'algoritmo non fa approssimazioni: testa **tutti** i possibili moltiplicatori di isomorfismo. Ecco i tempi cronometrati su singolo core CPU:
+The algorithm makes no approximations: it tests **all** possible isomorphism multipliers. Here are the clocked times on a single CPU core:
 
-| Domain (N) | K (Massimale Trovato) | Costruzione Bose $O(1)$ | Densità Nostra | Exec Time (Numba JIT) |
+| Domain (N) | K (Maximal Found) | Bose Construction $O(1)$ | Our Density | Exec Time (Numba JIT) |
 |---|---|---|---|---|
-| **50** | **8** | - | 1.131 | 1.442s *(include JIT Compile)* |
+| **50** | **8** | - | 1.131 | 1.442s *(includes JIT Compile)* |
 | **1,000** | **35** | 31 | 1.107 | 0.009s |
 | **5,000** | **75** | 70 | 1.061 | 0.127s |
 | **10,000** | **105** | 100 | 1.050 | 0.669s |
@@ -59,25 +61,25 @@ L'algoritmo non fa approssimazioni: testa **tutti** i possibili moltiplicatori d
 | **100,000** | **322** | 316 | 1.018 | 29.988s |
 
 > [!WARNING]
-> **Il Muro Polinomiale:** 
-> L'algoritmo scala in $O(N \sqrt{N})$. Questo significa che testare range come $N=1.000.000$ inizierà a richiedere decine di minuti. Non è un limite esplosivo come i SAT solver (non crasherà per out-of-memory), ma il numero di isomorfismi ciclici da vagliare diventa estremamente vasto.
+> **The Polynomial Wall:** 
+> The algorithm scales in $O(N \sqrt{N})$. This means that testing ranges like $N=1,000,000$ will start to take tens of minutes. It is not an explosive limit like SAT solvers (it won't crash for out-of-memory), but the number of cyclic isomorphisms to sift through becomes extremely vast.
 
 ---
 
-## 🧮 5. Come Funziona il Motore Sotto il Cofano
+## 🧮 5. How the Engine Works Under the Hood
 
-La logica matematica fa a meno degli alberi decisionali logici dei solver CP e utilizza un triplice salto geometrico:
+The mathematical logic dispenses with the logical decision trees of CP solvers and uses a triple geometric leap:
 
-1. **Singer Difference Sets su $GF(q^3)$**: Iniziamo costruendo un set di differenze ciclico usando i punti di un piano proiettivo su un Campo di Galois. Generiamo $q+1$ elementi modulo $v = q^2+q+1$.
-2. **Overshooting Topologico**: L'algoritmo non sceglie un primo $q$ tale che $v \le N$. Sceglie un dominio dilatato fino a un +25% rispetto al target $N$, ottenendo un potenziale $K$ superiore, anche se disperso.
-3. **Isomorfismi di Hall (Il Core Loop)**: Moltiplicando il set modulare per ogni intero $k$ coprimo a $v$, deformiamo topologicamente lo spazio delle distanze. Questo loop cerca il moltiplicatore che condensa tutti gli elementi nel minimo spazio lineare, per poi amputare brutalmente l'eccesso topologico con il *best cut*.
-4. **LLVM JIT Compiler (Numba)**: Per fare in modo che il loop delle distanze non richieda ore, il codice `numpy` viene tradotto in Assembly C prima dell'esecuzione, garantendo prestazioni impossibili per il Python tradizionale.
+1. **Singer Difference Sets over $GF(q^3)$**: We start by constructing a cyclic difference set using the points of a projective plane over a Galois Field. We generate $q+1$ elements modulo $v = q^2+q+1$.
+2. **Topological Overshooting**: The algorithm does not choose a prime $q$ such that $v \le N$. It chooses a domain dilated up to +25% compared to the target $N$, obtaining a higher potential $K$, albeit dispersed.
+3. **Hall Isomorphisms (The Core Loop)**: Multiplying the modular set by every integer $k$ coprime to $v$, we topologically deform the space of distances. This loop searches for the multiplier that condenses all elements into the minimum linear space, then brutally amputates the topological excess with the *best cut*.
+4. **LLVM JIT Compiler (Numba)**: To ensure the distance loop doesn't take hours, the `numpy` code is translated into C Assembly before execution, guaranteeing performance impossible for traditional Python.
 
 ---
 
-## ⚙️ 6. Istruzioni d'Uso
+## ⚙️ 6. Instructions for Use
 
-### Requisiti
+### Requirements
 - `Python 3.x`
 - `numpy`
 - `numba`
@@ -86,22 +88,22 @@ La logica matematica fa a meno degli alberi decisionali logici dei solver CP e u
 pip install numpy numba
 ```
 
-### Esecuzione
+### Execution
 ```bash
-# Esecuzione standard (default N=10000)
+# Standard execution (default N=10000)
 python sidon_benchmark.py
 
-# Analisi su macro-domini
+# Macro-domain analysis
 python sidon_benchmark.py -n 50000
 
-# Esportazione in file di testo
+# Export to text file
 python sidon_benchmark.py -n 100000 -o result_100k.txt
 ```
 
 ---
 
-## 🏆 Il Set Record da 105 Elementi ($N=10000$)
-Questo è il set massimale prodotto dall'algoritmo per $N=10000$. La densità di $1.050\times\sqrt{N}$ asfalta le costruzioni algebriche standard senza dover attendere millenni con un solver CP.
+## 🏆 The 105-Element Record Set ($N=10000$)
+This is the maximal set produced by the algorithm for $N=10000$. The density of $1.050\times\sqrt{N}$ crushes standard algebraic constructions without having to wait millennia with a CP solver.
 
 ```text
     1,    50,    72,   173,   198,   255,   262,   364,   383,   478
@@ -119,11 +121,11 @@ Questo è il set massimale prodotto dall'algoritmo per $N=10000$. La densità di
 
 ---
 
-## 📚 7. Bibliografia
+## 📚 7. Bibliography
 - **Erdős, P., & Turán, P. (1941)**: *On a problem of Sidon in additive number theory and on some related problems*.
-- **Distributed.net OGR Project**: [Official OGR-28 Completion Press Release](https://blogs.distributed.net/2022/11/23/17/14/bovine/). (La prova materiale dei limiti computazionali dei solver Boolean/SAT).
+- **Distributed.net OGR Project**: [Official OGR-28 Completion Press Release](https://blogs.distributed.net/2022/11/23/17/14/bovine/). (The material proof of the computational limits of Boolean/SAT solvers).
 - **Shearer, J. B. (IBM Research)**: [Golomb Ruler Table](http://www.research.ibm.com/people/s/shearer/grle.html).
-- **Cilleruelo, J. (2010)**: *Combinatorial problems in finite fields and Sidon sets*. (Geometria Algebrica moderna per sequenze B_2).
+- **Cilleruelo, J. (2010)**: *Combinatorial problems in finite fields and Sidon sets*. (Modern Algebraic Geometry for B_2 sequences).
 - **Smith, B. M., et al. (2000)**: *Constraint Programming Models for the Golomb Ruler Problem*.
 
 ## 📄 License
