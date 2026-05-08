@@ -15,7 +15,7 @@ When a Sidon set is translated to start at $0$, it is perfectly equivalent to a 
 ### The Density Barrier
 The central problem in combinatorial number theory is maximizing the cardinality $K$ (number of elements) for a given domain $N$. 
 According to the **Erdős-Turán theorem (1941)**, the theoretical upper bound for the density of a Sidon Set is:
-$ \limsup_{N \to \infty} \frac{K}{\sqrt{N}} \le 1 $
+$\limsup_{N \to \infty} \frac{K}{\sqrt{N}} \le 1$
 Most naive greedy algorithms fall into the "Mian-Chowla trap", yielding sub-optimal sets of size $K \approx N^{1/3}$. Reaching the absolute limit requires algebraic projective geometry.
 
 ---
