@@ -20,7 +20,20 @@ Exceeding this limit in finite spaces requires algebraic constructions that mani
 
 ---
 
-## 🥊 2. State of the Art: Comparative Analysis
+## 🤖 2. The Role of AI (Human-AI Symbiosis)
+
+While the final engine is pure deterministic mathematics, the architectural discovery process was entirely guided by an LLM following a **FunSearch-inspired paradigm**.
+Traditional algorithmic development would take months of trial and error. Here, the AI acted as a pair-programmer and theoretical navigator:
+- **Phase 1 (Heuristic Search)**: Initially exploring stochastic Greedy algorithms and Simulated Annealing. The AI identified the polynomial limits of L4 energy collisions.
+- **Phase 2 (Algebraic Seeding)**: The AI proposed injecting Bose (1942) base structures as initialization vectors for the heuristic solver, observing that deterministic seeds accelerated convergence but capped density.
+- **Phase 3 (Galois Projection)**: Shifting to pure number theory, the AI orchestrated the implementation of Singer Difference Sets over $GF(q^3)$ projective planes.
+- **Phase 4 (Isomorphic Distorsion)**: To breach the theoretical $1.0\sqrt{N}$ baseline, the AI suggested utilizing Hall's Multiplier Theorem, sliding a cyclic window over isomorphically expanded sets.
+
+The result is a hybrid triumph: the LLM provided the mathematical intuition and architectural jumps, while the deterministic Numba-compiled code executed the brute-force topological mapping.
+
+---
+
+## 🥊 3. State of the Art: Comparative Analysis
 
 Currently, research to compute optimal rulers or maximal Sidon sets is broadly categorized into three methodologies, alongside our proposed paradigm. Below is a comparative examination.
 
@@ -33,7 +46,7 @@ Currently, research to compute optimal rulers or maximal Sidon sets is broadly c
 
 ---
 
-## 📈 3. Visual Benchmark: Execution vs Density
+## 📈 4. Visual Benchmark: Execution vs Density
 
 Theoretical bounds are corroborated by empirical performance analysis.
 
@@ -45,7 +58,7 @@ Theoretical bounds are corroborated by empirical performance analysis.
 
 ---
 
-## 🌌 4. Empirical Data on Macro-Domains
+## 🌌 5. Empirical Data on Macro-Domains
 
 The algorithm performs an exhaustive search of all valid isomorphism multipliers. Execution times were recorded on a single CPU core:
 
@@ -66,7 +79,7 @@ The algorithm performs an exhaustive search of all valid isomorphism multipliers
 
 ---
 
-## 🧮 5. Algorithmic Architecture
+## 🧮 6. Algorithmic Architecture
 
 The mathematical logic bypasses the decision trees of CP solvers in favor of geometric projection:
 
@@ -77,7 +90,7 @@ The mathematical logic bypasses the decision trees of CP solvers in favor of geo
 
 ---
 
-## ⚙️ 6. Usage and Implementation
+## ⚙️ 7. Usage and Implementation
 
 ### Repository Structure
 - `src/`: Core algorithm modules.
@@ -111,7 +124,27 @@ For a detailed analysis of how this algorithm resolves hardware constraints in *
 
 ---
 
-## 📚 7. Bibliography
+## 🏆 8. The 105-Element Record Set ($N=10000$)
+
+To empirically demonstrate the algorithm's capability, here is the maximal $K=105$ set generated for $N=10,000$. Achieving a density of $1.050\times\sqrt{N}$, it outperforms standard base algebraic formulations.
+
+```text
+    1,    50,    72,   173,   198,   255,   262,   364,   383,   478
+  507,   610,   834,  1160,  1239,  1354,  1518,  1624,  1679,  1685
+ 1778,  1820,  1927,  2265,  2267,  2293,  2310,  2311,  2657,  2660
+ 2681,  2697,  2793,  3033,  3349,  3476,  3541,  3645,  3657,  4046
+ 4131,  4248,  4278,  4287,  4301,  4370,  4599,  4785,  4832,  5051
+ 5193,  5333,  5368,  5419,  5430,  5506,  5606,  5619,  5686,  5863
+ 5897,  5929,  5981,  6146,  6182,  6257,  6377,  6410,  6556,  6831
+ 6846,  6976,  7067,  7105,  7115,  7175,  7265,  7273,  7447,  7672
+ 7777,  7782,  7850,  8070,  8097,  8300,  8374,  8508,  8558,  8562
+ 8639,  8717,  8776,  8939,  8980,  9011,  9173,  9261,  9317,  9380
+ 9474,  9532,  9819,  9839,  9990
+```
+
+---
+
+## 📚 9. Bibliography
 - **Erdős, P., & Turán, P. (1941)**: *On a problem of Sidon in additive number theory and on some related problems*.
 - **Distributed.net OGR Project**: [Official OGR-28 Completion Press Release](https://blogs.distributed.net/2022/11/23/17/14/bovine/).
 - **Shearer, J. B. (IBM Research)**: [Golomb Ruler Table](http://www.research.ibm.com/people/s/shearer/grle.html).
