@@ -58,17 +58,6 @@ The algorithm correctly identifies the absolute mathematical optimum in fraction
 
 ---
 
-## 📈 4. Visual Benchmark: Execution vs Density
-
-Theoretical bounds are corroborated by empirical performance analysis.
-
-![Comparative Benchmark Graph](assets/benchmark_comparison.png)
-
-### Benchmark Observations
-- **Execution Times (Left Panel)**: SAT and CP Solvers exhibit exponential growth, entering a region of physical incomputability for $N > 600$. Our algorithm, utilizing LLVM acceleration, evaluates domains up to $N=10,000$ in sub-second times. Base algebraic algorithms remain $O(1)$.
-- **Density Efficiency (Right Panel)**: While base $O(1)$ algebraic algorithms strictly adhere to the theoretical threshold $1.0\times\sqrt{N}$, our algorithm leverages topological overshooting and cyclic isomorphism to reach density curves of $\sim 1.05\times\sqrt{N}$.
-
----
 
 ## 🌌 5. Empirical Data on Macro-Domains
 
