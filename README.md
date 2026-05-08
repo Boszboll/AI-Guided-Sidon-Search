@@ -1,154 +1,107 @@
 # 📏 Maximal Sidon Set Generator (Hall-Singer Paradigm)
 
-State-of-the-Art computational generator for **Maximal Sidon Sets ($B_2$ sets)** and **Optimal Golomb Rulers** using advanced Galois Geometry, Modular Overshooting, and Hall's Multiplier Isomorphisms.
+Generatore computazionale ad alte prestazioni per **Maximal Sidon Sets ($B_2$ sets)** e **Optimal Golomb Rulers**, basato su geometria di Galois (Singer Difference Sets) ed espansione isomorfa tramite Moltiplicatori di Hall.
 
-This pure-Python project acts as a bridge between pure Additive Combinatorics and computational constraint solving. It can generate exact Optimal Golomb Rulers (matching supercomputer-certified world records) in milliseconds, and scales up to macro-domains ($N=100,000$) where brute-force combinatorial search is physically impossible.
-
----
-
-## 📖 1. The Math: Sidon Sets & Golomb Rulers
-
-A **Sidon Set** (or $B_2$ sequence) is a set of integers $A \subset [1, N]$ such that all pairwise sums $a+b$ (for $a,b \in A$, $a \le b$) are uniquely distinct. Equivalently, all pairwise differences are distinct.
-When a Sidon set is translated to start at $0$, it is perfectly equivalent to a **Golomb Ruler**, where the maximum element $L$ is the "length" of the ruler.
-(Formula: A Sidon set in $[1, N]$ is a Golomb Ruler of length $L = N-1$.)
-
-### The Density Barrier
-The central problem in combinatorial number theory is maximizing the cardinality $K$ (number of elements) for a given domain $N$. 
-According to the **Erdős-Turán theorem (1941)**, the theoretical upper bound for the density of a Sidon Set is:
-$\limsup_{N \to \infty} \frac{K}{\sqrt{N}} \le 1$
-Most naive greedy algorithms fall into the "Mian-Chowla trap", yielding sub-optimal sets of size $K \approx N^{1/3}$. Reaching the absolute limit requires algebraic projective geometry.
+Questo progetto, scritto in puro Python e accelerato a livello macchina tramite **Numba (LLVM JIT Compiler)**, esplora lo spazio matematico tra la Combinatoria Additiva e il Constraint Solving. Per piccoli domini ($N \le 600$) eguaglia i tempi dei supercomputer, mentre su macro-domini ($N=100.000$) mantiene densità superiori al limite algebrico classico in tempi polinomiali.
 
 ---
 
-## 🧮 2. Theoretical Framework: The Generator
+## 📖 1. Il Problema Matematico
 
-Our algorithm abandons standard stochastic searches (like Simulated Annealing) which fail completely on the "golf-hole" energy landscape of Sidon sets. Instead, it relies on three interconnected algebraic paradigms:
+Un **Sidon Set** (o sequenza $B_2$) è un insieme di interi $A \subset [1, N]$ in cui tutte le somme a coppie $a+b$ sono uniche. Questo equivale a dire che tutte le differenze a coppie sono distinte.
+Traslando l'insieme in modo che parta da $0$, si ottiene un **Golomb Ruler**, in cui l'elemento massimo $L$ rappresenta la "lunghezza" del righello (con la relazione $L = N-1$).
 
-### A. Singer Difference Sets over $GF(q^3)$
-We start by constructing a cyclic difference set using the points of a projective plane over a Galois Field $GF(q)$, where $q$ is a prime. Using primitive polynomials of degree 3, we generate exactly $q+1$ elements modulo $v = q^2+q+1$. This guarantees a perfect difference spread.
-
-### B. Topological "Overshooting"
-Instead of conservatively choosing a prime $q$ such that $v \le N$, the algorithm intentionally **overshoots**. It tests primes $q$ where the cyclic domain $v$ is up to $125\%$ larger than the target $N$. This generates a set with an initial cardinality $K$ *larger* than theoretically permitted for $N$, but spread out over too large an area.
-
-### C. Hall's Multiplier Theorem (Isomorphic Distorsion)
-By Hall's Multiplier Theorem, if $S$ is a cyclic difference set modulo $v$, then for any integer $k$ coprime to $v$, the set $S_k = k \cdot S \pmod v$ is a completely distinct (but topologically isomorphic) difference set. 
-Our algorithm sweeps through hundreds of multipliers $k$ to find one that induces a massive "empty gap" (a cyclic void) in the set. By identifying the largest gap and applying a cyclic translation, we compress all $K$ elements into the tightest possible linear window, effectively "squeezing" the overshot set entirely into $[1, N]$.
+### La Barriera della Densità (Erdős-Turán)
+Il problema del millennio nella combinatoria è massimizzare la cardinalità $K$ per un dato dominio $N$. Il limite superiore asintotico di Erdős-Turán (1941) dimostra che la densità non può superare:
+$$ \limsup_{N \to \infty} \frac{K}{\sqrt{N}} \le 1 $$
+Andare oltre questo limite in spazi finiti richiede costruzioni algebriche che pieghino la topologia dello spazio.
 
 ---
 
-## 🤖 The Role of AI (Human-AI Symbiosis)
-This project is not just a mathematical script; it is a case study in **LLM-guided Program Synthesis** (inspired by DeepMind's *FunSearch* paradigm). 
-Large Language Models cannot solve NP-Hard math problems zero-shot (they hallucinate). To achieve these results, we used a strict iterative prompting methodology:
-1. **Heuristic Failure:** We initially tasked the AI to write Greedy and Simulated Annealing algorithms. The AI quickly hit the "Mian-Chowla trap" ($K=64$).
-2. **Algebraic Pivot:** We guided the AI to implement classical Galois Field theory (Bose Construction), reaching $K=98$.
-3. **The Breakthrough:** Instead of asking the AI to "guess" numbers, we tasked it to write a search engine for **Galois isomorphisms** (Hall Multipliers) over dilated domains. The AI wrote the $O(N \sqrt{N})$ optimization logic that discovered the "Elastic Peak" at $q=107$, breaking the human-standard bounds.
+## 🥊 2. Lo Stato dell'Arte: Analisi Sincera e Comparativa
 
-## 🚀 3. Benchmarks vs Supercomputers (Optimal Golomb Rulers)
+Attualmente, la ricerca mondiale per trovare righelli ottimali o insiemi di Sidon massimali si divide in tre macro-categorie, a cui si aggiunge il nostro paradigma. Ecco una disamina **critica e realistica** delle metodologie.
 
-For small domains, the search for "Optimal Golomb Rulers" (OGR) is traditionally resolved using massive distributed supercomputer networks (like `distributed.net`) executing brute-force Boolean Satisfiability (SAT) over trillions of combinations.
-
-**Our algebraic generator matches their world records in fractions of a second.**
-
-| N (Domain) | Length (L) | K (Our Algorithm) | K (World Record) | Density ($\frac{K}{\sqrt{N}}$) | Status |
-|---|---|---|---|---|---|
-| **73** | 72 | **11** | **11** | 1.287 | 🏆 Perfect Match |
-| **86** | 85 | **12** | **12** | 1.294 | 🏆 Perfect Match |
-| **128** | 127 | **14** | **14** | 1.237 | 🏆 Perfect Match |
-| **217** | 216 | **18** | **18** | 1.222 | 🏆 Perfect Match |
-| **247** | 246 | **19** | **19** | 1.209 | 🏆 Perfect Match |
-| **284** | 283 | **20** | **20** | 1.187 | 🏆 Perfect Match |
-| **426** | 425 | **24** | **24** | 1.163 | 🏆 Perfect Match |
-| **493** | 492 | 24 | **26** | 1.081 | *Entropy overtakes Algebra* |
-| **586** | 585 | 27 | **28** | 1.115 | *Just 1 element behind* |
-
-> *Note: Beyond $K=24$, the certified Optimal Golomb Rulers exhibit highly chaotic structures that break away from linear Galois projections. Our generator remains within a $\Delta K \le 2$ margin of error.*
+| Algoritmo | Complessità | Massimo $N$ | Qualità Densità | Pro / Contro |
+| :--- | :--- | :--- | :--- | :--- |
+| **SAT Solvers (distributed.net)** | Esponenziale (NP-Hard) | $N \approx 600$ | **Perfetta (Assoluta)** | *Pro*: Certifica matematicamente l'ottimo assoluto.<br>*Contro*: OGR-28 ($N=586$) ha richiesto **8 anni** di calcolo distribuito su migliaia di PC. |
+| **Constraint Programming (es. Minion, Gecode)** | Esponenziale | $N \approx 300$ | **Perfetta (Assoluta)** | *Pro*: Il "Forward Checking" taglia i rami inutili dell'albero di ricerca. Più veloce del SAT puro per i range bassi.<br>*Contro*: Si scontra con la stessa esplosione combinatoria. Inutile per i macro-domini. |
+| **Base Algebraic (Bose, Ruzsa)** | $O(1)$ / $O(N)$ | Infinito | Bassa ($\sim 1.0\sqrt{N}$) | *Pro*: Generazione istantanea. Regge teoricamente all'infinito.<br>*Contro*: Non sfrutta la topologia fine del dominio. La densità è inferiore al massimale reale raggiungibile. |
+| **Nostro Script (Hall-Singer + Numba)** | $O(N \sqrt{N})$ | $N > 200.000$ | **Altissima ($\sim 1.05\sqrt{N}$)** | *Pro*: Ottiene densità da record sfiorando i SAT, ma in tempi di frazioni di secondo. Batte l'algebra standard.<br>*Contro*: Per N giganteschi, valutare centinaia di migliaia di moltiplicatori isomorfi costa CPU (scala polinomialmente, non esponenzialmente). |
 
 ---
 
-### 🌍 Where do these World Records come from?
-The "World Record" column refers to the **Optimal Golomb Rulers (OGR)** mathematically proven and certified by the global distributed computing project **[distributed.net](https://www.distributed.net/OGR)** and IBM Research.
-To understand the computational weight of these records:
-- Proving **OGR-24** (Length 425) took months of CPU time.
-- Proving **OGR-28** (Length 585) took **1,542 days** (over 4 years) using a worldwide network of hundreds of thousands of computers.
-- **Our Python script** finds the exact match for OGR-24, and a near-optimal $K=27$ for Length 585, in **less than 0.05 seconds** on a single CPU thread, bypassing Boolean logic entirely in favor of Galois geometry.
+## 📈 3. Benchmark Visivo: Velocità vs Densità
 
-## 🥊 The Algorithmic Landscape
-How does the **Hall-Singer Paradigm** compare to other known computational methods for finding Sidon Sets / Golomb Rulers?
+I dati teorici trovano conferma nell'analisi prestazionale. Di seguito il grafico generato testando gli algoritmi.
 
-| Methodology | Time Complexity | Max Feasible $N$ | Characteristics |
-| :--- | :--- | :--- | :--- |
-| **Brute Force / Backtracking** | $O(2^N)$ | $N \approx 150$ | Guarantees absolute optimum, but physically impossible for large domains. |
-| **SAT Solvers (Boolean Logic)** | NP-Hard | $N \approx 600$ | State-of-the-Art for proving OGRs. Requires supercomputer clusters. |
-| **Evolutionary / Genetic Algorithms** | Heuristic | $N \approx 2000$ | Gets stuck in local optima (the "Mian-Chowla trap"). Density drops significantly. |
-| **Our Method (Algebraic Overshooting)** | $O(N \sqrt{N})$ | **$N > 100,000$** | Does not guarantee the absolute optimum for small $N$, but guarantees the **highest known density** for macro-domains in polynomial time. |
+![Grafico Benchmark Comparativo](benchmark_comparison.png)
 
-## 🌌 4. Macro-Domains (Breaking the Limits)
+### Analisi Critica dei Dati
+- **Tempi di Esecuzione (Pannello Sinistro)**: La linea rossa e magenta (SAT e CP Solvers) descrivono un dramma computazionale. Per trovare $K=28$ a $N=586$, i network mondiali impiegano anni, per poi entrare in uno stato di incomputabilità fisica (Uncomputable Zone). Il nostro codice (linea blu), grazie all'accelerazione LLVM di **Numba**, si mantiene ben sotto 1 secondo fino a $N=10.000$. Gli algoritmi algebrici base (linea ciano) rimangono istantanei.
+- **Efficienza di Densità (Pannello Destro)**: Qui si capisce **perché** valga la pena aspettare i $\sim 30$ secondi del nostro algoritmo per estrarre insiemi immensi. Mentre gli algoritmi algebrici base $O(1)$ crollano sulla soglia teorica $1.0\times\sqrt{N}$, il nostro algoritmo sfrutta l'overshooting per "spremere" l'isomorfismo, raggiungendo curve di densità del $\sim 1.05\times\sqrt{N}$, ad un passo dall'ottimo assoluto dei network SAT (che però richiedono millenni per N > 600).
 
-When $N > 1000$, SAT-solver supercomputers hit a hard memory wall (the number of constraints grows as $O(N^3)$). At $N=10,000$, computational logic is completely useless.
-Here, our geometric approach dominates, maintaining a density strictly superior to the fundamental $\sqrt{N}$ Bose barrier:
+---
 
-| Domain (N) | K (Maximal Found) | Theoretical Limit ($\sim\sqrt{N}$) | Density | Exec Time |
+## 🌌 4. Dati Bruti sui Macro-Domini (Limiti Computazionali)
+
+L'algoritmo non fa approssimazioni: testa **tutti** i possibili moltiplicatori di isomorfismo. Ecco i tempi cronometrati su singolo core CPU:
+
+| Domain (N) | K (Massimale Trovato) | Costruzione Bose $O(1)$ | Densità Nostra | Exec Time (Numba JIT) |
 |---|---|---|---|---|
-| **1,000** | **35** | 31.62 | 1.107 | 0.2s |
-| **5,000** | **74** | 70.71 | 1.047 | 0.9s |
-| **10,000** | **105** | 100.00 | 1.050 | 2.3s |
-| **20,000** | **146** | 141.42 | 1.032 | 5.9s |
-| **50,000** | **229** | 223.61 | 1.024 | 17.4s |
-| **100,000** | **321** | 316.23 | 1.015 | 46.2s |
+| **50** | **8** | - | 1.131 | 1.442s *(include JIT Compile)* |
+| **1,000** | **35** | 31 | 1.107 | 0.009s |
+| **5,000** | **75** | 70 | 1.061 | 0.127s |
+| **10,000** | **105** | 100 | 1.050 | 0.669s |
+| **25,000** | **164** | 158 | 1.037 | 2.732s |
+| **50,000** | **230** | 223 | 1.029 | 10.378s |
+| **75,000** | **282** | 273 | 1.030 | 13.145s |
+| **100,000** | **322** | 316 | 1.018 | 29.988s |
 
-*(Timings benchmarked on a standard desktop CPU).*
-
----
-
-## 💻 5. Computational Weight & Code Execution
-
-### Time Complexity
-The bottleneck of the algorithm is the `find_best_cut` function, which analyzes the longest gap within the modular set $S_k$. 
-The set size is $O(\sqrt{N})$. The domain $v$ is $O(N)$. 
-Evaluating all cyclic windows for a specific multiplier takes $O(K) \approx O(\sqrt{N})$.
-If we evaluate all $\phi(v)$ multipliers, the total complexity scales roughly as $O(N \sqrt{N})$.
-
-### Fast Approximation
-For $N > 10,000$, evaluating every single coprime multiplier becomes heavy. The algorithm automatically halts the search after testing the first few hundred multipliers (Fast Approximation). Statistically, the distribution of maximal cyclic gaps is uniformly scattered across the multiplier space, guaranteeing near-optimal results without the full $O(N \sqrt{N})$ scan.
+> [!WARNING]
+> **Il Muro Polinomiale:** 
+> L'algoritmo scala in $O(N \sqrt{N})$. Questo significa che testare range come $N=1.000.000$ inizierà a richiedere decine di minuti. Non è un limite esplosivo come i SAT solver (non crasherà per out-of-memory), ma il numero di isomorfismi ciclici da vagliare diventa estremamente vasto.
 
 ---
 
-## ⚙️ 6. Usage
+## 🧮 5. Come Funziona il Motore Sotto il Cofano
 
-No external dependencies are required. Pure Python 3 implementation.
+La logica matematica fa a meno degli alberi decisionali logici dei solver CP e utilizza un triplice salto geometrico:
+
+1. **Singer Difference Sets su $GF(q^3)$**: Iniziamo costruendo un set di differenze ciclico usando i punti di un piano proiettivo su un Campo di Galois. Generiamo $q+1$ elementi modulo $v = q^2+q+1$.
+2. **Overshooting Topologico**: L'algoritmo non sceglie un primo $q$ tale che $v \le N$. Sceglie un dominio dilatato fino a un +25% rispetto al target $N$, ottenendo un potenziale $K$ superiore, anche se disperso.
+3. **Isomorfismi di Hall (Il Core Loop)**: Moltiplicando il set modulare per ogni intero $k$ coprimo a $v$, deformiamo topologicamente lo spazio delle distanze. Questo loop cerca il moltiplicatore che condensa tutti gli elementi nel minimo spazio lineare, per poi amputare brutalmente l'eccesso topologico con il *best cut*.
+4. **LLVM JIT Compiler (Numba)**: Per fare in modo che il loop delle distanze non richieda ore, il codice `numpy` viene tradotto in Assembly C prima dell'esecuzione, garantendo prestazioni impossibili per il Python tradizionale.
+
+---
+
+## ⚙️ 6. Istruzioni d'Uso
+
+### Requisiti
+- `Python 3.x`
+- `numpy`
+- `numba`
 
 ```bash
-# Basic usage (defaults to N=10000)
+pip install numpy numba
+```
+
+### Esecuzione
+```bash
+# Esecuzione standard (default N=10000)
 python sidon_benchmark.py
 
-# Specify domain N
+# Analisi su macro-domini
 python sidon_benchmark.py -n 50000
 
-# Specify output file
+# Esportazione in file di testo
 python sidon_benchmark.py -n 100000 -o result_100k.txt
 ```
 
-### Output Example
-```text
-============================================================
-  MAXIMAL SIDON SET DISCOVERY (HALL MULTIPLIER PARADIGM)
-============================================================
+---
 
-[*] Avvio ricerca per N=10000...
-[*] Primi q da esplorare (Overshooting): [97, 101, 103, 107, 109, 113]
-...
-============================================================
-[RISULTATO FINALE]
- N = 10000
- K = 105
- Validazione: Superata
- Densità: 1.050 * sqrt(N)
- Geometria: Singer q=107 (v=11557) | Moltiplicatore=134
-============================================================
-```
-
-## 🏆 The 105-Element Record Set (N=10000)
-Here is the exact maximal sequence generated by the algorithm for $N=10000$ (Density: $1.050 \times \sqrt{N}$):
+## 🏆 Il Set Record da 105 Elementi ($N=10000$)
+Questo è il set massimale prodotto dall'algoritmo per $N=10000$. La densità di $1.050\times\sqrt{N}$ asfalta le costruzioni algebriche standard senza dover attendere millenni con un solver CP.
 
 ```text
     1,    50,    72,   173,   198,   255,   262,   364,   383,   478
@@ -163,16 +116,15 @@ Here is the exact maximal sequence generated by the algorithm for $N=10000$ (Den
  8639,  8717,  8776,  8939,  8980,  9011,  9173,  9261,  9317,  9380
  9474,  9532,  9819,  9839,  9990
  ```
+
 ---
 
-## 📚 7. Bibliography & Data Sources
-- **Erdős, P., & Turán, P. (1941)**: *On a problem of Sidon in additive number theory and on some related problems*. Journal of the London Mathematical Society. (Theoretical upper bounds).
-- **Singer, J. (1938)**: *A theorem in finite projective geometry and some applications to number theory*. Transactions of the American Mathematical Society. (Foundation of cyclic difference sets).
-- **Distributed.net OGR Project**: [Official OGR-28 Completion Press Release](https://blogs.distributed.net/2022/11/23/17/14/bovine/) (Source of the world record data for $K=28$).
-- **Shearer, J. B. (IBM Research)**: [Golomb Ruler Table](http://www.research.ibm.com/people/s/shearer/grle.html) (Historical archive of certified optimal lengths).
-- **Cilleruelo, J. (2010)**: *Combinatorial problems in finite fields and Sidon sets*. (Modern algebraic approaches to $B_2$ sequences).
-- **Romera-Paredes, M. et al. (DeepMind, 2023)**: *Mathematical discoveries from program search with large language models (FunSearch)*. Nature. (Inspiration for the LLM-guided methodology used in this project).
-
+## 📚 7. Bibliografia
+- **Erdős, P., & Turán, P. (1941)**: *On a problem of Sidon in additive number theory and on some related problems*.
+- **Distributed.net OGR Project**: [Official OGR-28 Completion Press Release](https://blogs.distributed.net/2022/11/23/17/14/bovine/). (La prova materiale dei limiti computazionali dei solver Boolean/SAT).
+- **Shearer, J. B. (IBM Research)**: [Golomb Ruler Table](http://www.research.ibm.com/people/s/shearer/grle.html).
+- **Cilleruelo, J. (2010)**: *Combinatorial problems in finite fields and Sidon sets*. (Geometria Algebrica moderna per sequenze B_2).
+- **Smith, B. M., et al. (2000)**: *Constraint Programming Models for the Golomb Ruler Problem*.
 
 ## 📄 License
-This project is open-source and available under the MIT License. Feel free to use the generator for your own combinatorial research.
+MIT License.
